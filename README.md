@@ -1,3 +1,25 @@
+# Nyquist rev5 levinson keyboard
+
+A 4x6, split variant of my [previous planck es](https://configure.zsa.io/planck-ez/layouts/BNWxB/43ODz/0).
+
+The layout lives under [keyboards/keebio/nyquist/rev5/keymaps/torgmap](keyboards/keebio/nyquist/rev5/keymaps/torgmap)
+
+``` sh
+git submodule update --init --recursive
+qmk compile -kb keebio/nyquist/rev5 -km torgmap
+qmk flash -kb keebio/nyquist/rev5 -km torgmap
+# hit _LOWER+_UPPER+QK_BOOT, enjoy
+```
+
+Parts:
+
+- [Nyquist rev 5 PCB and Levinson FR4 plates](https://keeb.io/products/nyquist-levinson-rev-5-pcb-kit-60-40-split-ortholinear-keyboard)
+- Gateron black inc, lubed
+- Keycaps moved over from the planck ez
+
+---
+---
+
 # QMK Userspace
 
 This is a template repository which allows for an external set of QMK keymaps to be defined and compiled. This is useful for users who want to maintain their own keymaps without having to fork the main QMK repository.
