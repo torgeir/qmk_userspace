@@ -1,0 +1,8 @@
+#pragma once
+
+// split state
+#define SPLIT_RGB_MATRIX_ENABLE
+#define SPLIT_LAYER_STATE_ENABLE
+#define SPLIT_LED_STATE_ENABLE
+#define SPLIT_TRANSPORT_MIRROR
+#define SPLIT_MODS_ENABLE
