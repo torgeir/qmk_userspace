@@ -37,6 +37,7 @@ enum planck_keycodes {
 
 // S(kc) is Left shift
 // A(kc) is Alt
+// ALGR(kc) is AltGr
 // OSM(MOD_LSFT) not nescessary to keep shift pressed to make next typed letter uppercase, does not work with double tap like intellij wants
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -49,7 +50,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_LOWER] = LAYOUT_ortho_4x12(
   KC_GRV/*'*/, KC_EXLM/*!*/, KC_AT/*"*/,   KC_HASH/*#*/,    KC_DLR/*$*/, KC_PERC/*%*/, /**/  KC_CIRC,         NO_LCBR/*|*/, KC_ASTR/*(*/,    KC_LPRN/*)*/,    S(KC_MINS)/*?*/, S(KC_EQL)/*`*/,
   _______,     _______,      NO_LBRC/*[*/, NO_RBRC/*]*/,    _______,     _______,      /**/  S(NO_LCBR)/*\*/, KC_PSLS/*/*/, S(KC_8)/*(*/,    S(KC_9)/*)*/,    S(KC_RBRC)/*^*/, KC_PEQL/*=*/,
-  _______,     _______,      KC_NUBS/*<*/, S(KC_NUBS)/*>*/, _______,     _______,      /**/  _______,         KC_PLUS/*+*/, S(NO_LBRC)/*{*/, S(NO_RBRC)/*}*/, KC_PMNS/*-*/,    A(KC_RBRC)/*~*/,
+  _______,     _______,      KC_NUBS/*<*/, S(KC_NUBS)/*>*/, _______,     _______,      /**/  _______,         KC_PLUS/*+*/, S(NO_LBRC)/*{*/, S(NO_RBRC)/*}*/, KC_PMNS/*-*/,    ALGR(KC_RBRC)/*~*/,
   TO(_RAISE),  _______,      _______,      _______,         _______,     KC_BSPC,      /**/  _______,         _______,      _______,         _______,         _______,         _______
 ),
 [_RAISE] = LAYOUT_ortho_4x12(
