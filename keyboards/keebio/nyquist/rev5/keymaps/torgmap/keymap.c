@@ -230,10 +230,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case LOWER:
       if (record->event.pressed) {
         layer_on(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_LOWER);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
       }
       return false;
       break;
@@ -241,10 +239,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case RAISE:
       if (record->event.pressed) {
         layer_on(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_RAISE);
-        update_tri_layer(_LOWER, _RAISE, _ADJUST);
       }
       return false;
       break;
@@ -266,7 +262,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     if (!is_keyboard_master()) {
         uprintf("Slave received layer: %d\n", get_highest_layer(state));
     }
-    return state;
+    return update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
 }
 
 // led positions of nyquist rev5, left side
