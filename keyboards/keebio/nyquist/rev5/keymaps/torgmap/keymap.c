@@ -50,7 +50,7 @@ enum planck_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_ortho_4x12(
   KC_TAB,               KC_Q,    KC_W,    KC_E,    KC_R,  KC_T, /**/  KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,         KC_BSPC,
-  MT(MOD_LCTL, KC_ESC), MT(MOD_LSFT,KC_A),    MT(MOD_LALT,KC_S),    MT(MOD_LCTL,KC_D),    MT(MOD_LGUI,KC_F),  KC_G, /**/  KC_H,   MT(MOD_LGUI,KC_J), MT(MOD_LCTL,KC_K), MT(MOD_LALT,KC_L), MT(MOD_LSFT,KC_SCLN)/*ø*/, MT(MOD_LCTL, KC_QUOT)/*æ*/,
+  MT(MOD_LCTL, KC_ESC), KC_A,    KC_S,    KC_D,    KC_F,  KC_G, /**/  KC_H,   KC_J, KC_K, KC_L, KC_SCLN/*ø*/, KC_QUOT/*æ*/,
   OSM(MOD_LSFT),        KC_Z,    KC_X,    KC_C,    KC_V,  KC_B, /**/  KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH,      KC_ENT,
   OSM(MOD_HYPR),             KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC, /**/  KC_SPC, RAISE, MT(MOD_LGUI,KC_LEFT), MT(MOD_LALT,KC_DOWN), MT(MOD_LCTL,KC_UP),        HYPR_T(KC_RGHT)
 ),
