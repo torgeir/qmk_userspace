@@ -25,6 +25,7 @@ enum layer_names {
     _QWERTY,
     _LOWER,
     _RAISE,
+    _ONEHAND,
     _FUN,
     _ADJUST,
     _NAV,
@@ -39,13 +40,19 @@ enum planck_keycodes {
 // A(kc) is Alt
 // ALGR(kc) is AltGr
 // OSM(MOD_LSFT) not nescessary to keep shift pressed to make next typed letter uppercase, does not work with double tap like intellij wants
+//
+// MT takes MOD_-prefixed modifiers, not KC_
+//
+// OSL one shot layer - next key is from layer
+//
+//
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [_QWERTY] = LAYOUT_ortho_4x12(
-  KC_TAB,               KC_Q,    KC_W,    KC_E,    KC_R,  KC_T,   /**/  KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,         KC_BSPC,
-  MT(MOD_LCTL, KC_ESC), KC_A,    KC_S,    KC_D,    KC_F,  KC_G,   /**/  KC_H,   KC_J,  KC_K,    KC_L,    KC_SCLN/*ø*/, KC_QUOT/*æ*/,
-  OSM(MOD_LSFT),        KC_Z,    KC_X,    KC_C,    KC_V,  KC_B,   /**/  KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH,      KC_ENT,
-  MOD_HYPR,             KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC, /**/  KC_SPC, RAISE, KC_LEFT, KC_DOWN, KC_UP,        KC_RGHT
+  KC_TAB,               KC_Q,    KC_W,    KC_E,    KC_R,  KC_T, /**/  KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,         KC_BSPC,
+  MT(MOD_LCTL, KC_ESC), MT(MOD_LSFT,KC_A),    MT(MOD_LALT,KC_S),    MT(MOD_LCTL,KC_D),    MT(MOD_LGUI,KC_F),  KC_G, /**/  KC_H,   MT(MOD_LGUI,KC_J), MT(MOD_LCTL,KC_K), MT(MOD_LALT,KC_L), MT(MOD_LSFT,KC_SCLN)/*ø*/, MT(MOD_LCTL, KC_QUOT)/*æ*/,
+  OSM(MOD_LSFT),        KC_Z,    KC_X,    KC_C,    KC_V,  KC_B, /**/  KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH,      KC_ENT,
+  OSM(MOD_HYPR),             KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC, /**/  KC_SPC, RAISE, MT(MOD_LGUI,KC_LEFT), MT(MOD_LALT,KC_DOWN), MT(MOD_LCTL,KC_UP),        HYPR_T(KC_RGHT)
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   KC_GRV/*'*/, KC_EXLM/*!*/, KC_AT/*"*/,   KC_HASH/*#*/,    KC_DLR/*$*/, KC_PERC/*%*/, /**/  KC_CIRC,         NO_LCBR/*|*/, KC_ASTR/*(*/,    KC_LPRN/*)*/,    S(KC_MINS)/*?*/, S(KC_EQL)/*`*/,
@@ -55,15 +62,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [_RAISE] = LAYOUT_ortho_4x12(
   KC_EQL,      KC_1,               KC_2,                KC_3,                KC_4,   KC_5,        /**/ KC_6,         KC_7,        KC_8, KC_9,   KC_0,         KC_LBRC/*å*/,
-  S(KC_BSPC),  KC_F1,              KC_F2,               KC_F3,               KC_F4,  KC_PERC,     /**/ KC_PSLS/*/*/, KC_4,        KC_5, KC_6,   KC_PAST/***/, KC_PEQL/*=*/,
+  S(KC_BSPC),  KC_F1,              KC_F2,               KC_F3,               KC_F4,  KC_PERC,     /**/ NO_SLSH/*/*/, KC_4,        KC_5, KC_6,   KC_PAST/***/, KC_PEQL/*=*/,
   KC_LSFT,     KC_F5,              KC_F6,               KC_F7,               KC_F8,  _______,     /**/ KC_PPLS/*+*/, KC_1,        KC_2, KC_3,   KC_PMNS/*-*/, KC_BSLS/*@*/,
-  TO(_QWERTY), MT(KC_LCTL, KC_F9), MT(KC_LALT, KC_F10), MT(KC_LGUI, KC_F11), KC_F12, TO(_QWERTY), /**/ KC_BSPC,      TO(_QWERTY), KC_0, KC_DOT, KC_COMM,      TO(_NAV)
+  TO(_QWERTY), MT(KC_LCTL, KC_F9), MT(KC_LALT, KC_F10), MT(KC_LGUI, KC_F11), KC_F12, TO(_QWERTY), /**/ OSL(_ONEHAND),      TO(_QWERTY), KC_0, KC_DOT, KC_COMM,      TO(_NAV)
 ),
 [_ADJUST] = LAYOUT_ortho_4x12(
   _______,  _______,  MS_WHLD, MS_UP,   MS_WHLU, _______, /**/ _______, KC_PGDN, KC_PGUP, KC_MPRV, KC_MPLY, KC_MNXT,
   _______,  _______,  MS_LEFT, MS_DOWN, MS_RGHT, _______, /**/ KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_MUTE, KC_VOLU,
   RGB_TOG,  RGB_MOD,  RGB_HUI, RGB_VAI, RGB_SPI, EE_CLR,  /**/ _______, MS_BTN1, MS_BTN3, MS_BTN2, _______, KC_VOLD,
   TO(_FUN), RGB_RMOD, RGB_HUD, RGB_VAD, RGB_SPD, QK_RBT,  /**/ QK_BOOT, _______, _______, _______, _______, _______
+),
+[_ONEHAND] = LAYOUT_ortho_4x12(
+  KC_TAB,               KC_Q,    KC_W,    KC_E,    KC_R,  KC_T,
+  KC_TAB,               KC_Q,    KC_W,    KC_E,    KC_R,  KC_T,
+  MT(MOD_LCTL, KC_ESC), KC_A,    KC_S,    KC_D,    KC_F,  KC_G,
+  MT(MOD_LCTL, KC_ESC), KC_A,    KC_S,    KC_D,    KC_F,  KC_G,
+  OSM(MOD_LSFT),        KC_Z,    KC_X,    KC_C,    KC_V,  KC_B,
+  OSM(MOD_LSFT),        KC_Z,    KC_X,    KC_C,    KC_V,  KC_B,
+  OSM(MOD_HYPR),        KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC,
+  TO(_QWERTY),          KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC
 ),
 [_FUN] = LAYOUT_ortho_4x12(
   _______, _______, _______, _______, _______, _______, /**/ _______, _______, KC_UP,   _______, _______, _______,
