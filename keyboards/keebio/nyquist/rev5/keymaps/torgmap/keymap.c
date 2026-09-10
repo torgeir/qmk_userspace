@@ -20,13 +20,13 @@ const uint8_t O[3] = {RGB_ORANGE};
 const uint8_t P[3] = {RGB_PINK};
 const uint8_t C[3] = {RGB_CYAN};
 
-// order matters
+// order matters: base layers first, then layers that must override them
 enum layer_names {
     _QWERTY,
+    _FUN,
+    _ONEHAND,
     _LOWER,
     _RAISE,
-    _ONEHAND,
-    _FUN,
     _ADJUST,
     _NAV,
 };
@@ -70,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______,  _______,  MS_WHLD, MS_UP,   MS_WHLU, _______, /**/ _______, KC_PGDN, KC_PGUP, KC_MPRV, KC_MPLY, KC_MNXT,
   _______,  _______,  MS_LEFT, MS_DOWN, MS_RGHT, _______, /**/ KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_MUTE, KC_VOLU,
   RGB_TOG,  RGB_MOD,  RGB_HUI, RGB_VAI, RGB_SPI, EE_CLR,  /**/ _______, MS_BTN1, MS_BTN3, MS_BTN2, _______, KC_VOLD,
-  TO(_FUN), RGB_RMOD, RGB_HUD, RGB_VAD, RGB_SPD, QK_RBT,  /**/ QK_BOOT, _______, _______, _______, _______, _______
+  TO(_FUN), RGB_RMOD, RGB_HUD, RGB_VAD, RGB_SPD, QK_RBT,  /**/ QK_BOOT, _______, _______, _______, _______, TO(_QWERTY)
 ),
 [_ONEHAND] = LAYOUT_ortho_4x12(
   KC_TAB,               KC_Q,    KC_W,    KC_E,    KC_R,  KC_T,
@@ -83,10 +83,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   TO(_QWERTY),          KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC
 ),
 [_FUN] = LAYOUT_ortho_4x12(
-  _______, _______, _______, _______, _______, _______, /**/ _______, _______, KC_UP,   _______, _______, _______,
-  _______, _______, _______, _______, _______, _______, /**/ _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______,
-  KC_CAPS, _______, _______, _______, _______, _______, /**/ _______, _______, _______, _______, _______, _______,
-  _______, _______, _______, _______, _______, _______, /**/ _______, TO(_QWERTY), _______, _______, _______, _______
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,  KC_T,   /**/  KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,         KC_BSPC,
+  KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,  KC_G,   /**/  KC_H,   KC_J,  KC_K,    KC_L,    KC_SCLN/*ø*/, KC_QUOT/*æ*/,
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,  KC_B,   /**/  KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH,      KC_ENT,
+  KC_LCTL, KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC, /**/  KC_SPC, RAISE, KC_LEFT, KC_DOWN, KC_UP,        KC_RGHT
 ),
 [_NAV] = LAYOUT_ortho_4x12(
   _______, _______, MS_WHLD, MS_UP,   MS_WHLU, _______, /**/ _______, KC_PGDN,     KC_PGUP, _______, _______, _______,
@@ -112,16 +112,16 @@ const uint8_t* led_layout_nav[][6] = {
 
 const uint8_t* led_layout_fun[][6] = {
     // left
-    {X, X, X, X, X, X},
-    {X, X, X, X, X, X},
+    {X, X, C, X, X, X},
+    {B, C, C, C, X, X},
     {B, X, X, X, X, X},
-    {X, X, X, X, X, X},
+    {B, X, X, X, Y, X},
 
     // right
-    {X, X, Y, X, X, X},
-    {X, Y, Y, Y, X, X},
     {X, X, X, X, X, X},
-    {X, W, X, X, X, X},
+    {X, X, X, X, X, X},
+    {X, X, X, X, X, X},
+    {X, Y, X, X, X, X},
 };
 
 const uint8_t* led_layout_adjust[][6] = {
@@ -135,7 +135,7 @@ const uint8_t* led_layout_adjust[][6] = {
     {X, C, C, B, B, B},
     {G, G, G, G, B, B},
     {X, Y, Y, Y, X, B},
-    {R, X, X, X, X, X},
+    {R, X, X, X, X, W},
 };
 const uint8_t* led_layout_lower[][6] = {
     // left
@@ -359,6 +359,7 @@ bool rgb_matrix_indicators_user(void) {
         case _FUN:
             apply_led_layout(led_layout_fun);
             need_clear = true;
+            return false;
             break;
 
         case _ADJUST:
