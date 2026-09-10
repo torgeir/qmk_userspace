@@ -52,7 +52,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,               KC_Q,    KC_W,    KC_E,    KC_R,  KC_T, /**/  KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,         KC_BSPC,
   MT(MOD_LCTL, KC_ESC), KC_A,    KC_S,    KC_D,    KC_F,  KC_G, /**/  KC_H,   KC_J, KC_K, KC_L, KC_SCLN/*ø*/, KC_QUOT/*æ*/,
   OSM(MOD_LSFT),        KC_Z,    KC_X,    KC_C,    KC_V,  KC_B, /**/  KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH,      KC_ENT,
-  OSM(MOD_HYPR),        OSM(MOD_LCTL), OSM(MOD_LALT), OSM(MOD_LGUI), LOWER, KC_SPC, /**/  LT(_ONEHAND,KC_SPC), RAISE, MT(MOD_LGUI,KC_LEFT), MT(MOD_LALT,KC_DOWN), MT(MOD_LCTL,KC_UP),        HYPR_T(KC_RGHT)
+  OSM(MOD_HYPR),        OSM(MOD_LCTL), OSM(MOD_LALT), OSM(MOD_LGUI), LOWER, KC_SPC, /**/  LT(_ONEHAND,KC_SPC), RAISE, MT(MOD_LGUI,KC_LEFT), MT(MOD_LALT,KC_DOWN), MT(MOD_LCTL,KC_UP), HYPR_T(KC_RGHT)
+),
+[_FUN] = LAYOUT_ortho_4x12(
+  _______,  _______, _______, _______, _______, _______,  /**/ _______, _______, _______, _______, _______, _______,
+  KC_LCTL,  _______, _______, _______, _______, _______,  /**/ _______, _______, _______, _______, _______, _______,
+  KC_LSFT,  _______, _______, _______, _______, _______,  /**/ _______, _______, _______, _______, _______, _______,
+  KC_LCTL,  KC_LCTL, KC_LALT, KC_LGUI, _______, _______,  /**/ KC_SPC,  _______,  KC_LEFT, KC_DOWN, KC_UP,   KC_DOWN
 ),
 [_LOWER] = LAYOUT_ortho_4x12(
   KC_GRV/*'*/, KC_EXLM/*!*/, KC_AT/*"*/,   KC_HASH/*#*/,    KC_DLR/*$*/, KC_PERC/*%*/, /**/  KC_CIRC,         NO_LCBR/*|*/, KC_ASTR/*(*/,    KC_LPRN/*)*/,    S(KC_MINS)/*?*/, S(KC_EQL)/*`*/,
@@ -82,12 +88,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   OSM(MOD_HYPR),        KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC,
   TO(_QWERTY),          KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC
 ),
-[_FUN] = LAYOUT_ortho_4x12(
-  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,  KC_T,   /**/  KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,         KC_BSPC,
-  KC_LCTL, KC_A,    KC_S,    KC_D,    KC_F,  KC_G,   /**/  KC_H,   KC_J,  KC_K,    KC_L,    KC_SCLN/*ø*/, KC_QUOT/*æ*/,
-  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,  KC_B,   /**/  KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH,      KC_ENT,
-  KC_LCTL, KC_LCTL, KC_LALT, KC_LGUI, LOWER, KC_SPC, /**/  KC_SPC, RAISE, KC_LEFT, KC_DOWN, KC_UP,        KC_RGHT
-),
 [_NAV] = LAYOUT_ortho_4x12(
   _______, _______, MS_WHLD, MS_UP,   MS_WHLU, _______, /**/ _______, KC_PGDN,     KC_PGUP, _______, _______, _______,
   _______, _______, MS_LEFT, MS_DOWN, MS_RGHT, _______, /**/ KC_LEFT, KC_DOWN,     KC_UP,   KC_RGHT, _______, _______,
@@ -115,13 +115,13 @@ const uint8_t* led_layout_fun[][6] = {
     {X, X, C, X, X, X},
     {B, C, C, C, X, X},
     {B, X, X, X, X, X},
-    {B, X, X, X, Y, X},
+    {B, X, X, X, O, X},
 
     // right
     {X, X, X, X, X, X},
     {X, X, X, X, X, X},
     {X, X, X, X, X, X},
-    {X, Y, X, X, X, X},
+    {X, O, X, X, X, X},
 };
 
 const uint8_t* led_layout_adjust[][6] = {
