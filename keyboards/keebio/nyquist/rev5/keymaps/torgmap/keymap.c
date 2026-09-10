@@ -131,6 +131,20 @@ const uint8_t* led_layout_fun[][6] = {
     {X, O, X, X, X, X},
 };
 
+const uint8_t* led_layout_fun_num[][6] = {
+    // left
+    {X, G, G, G, G, G},
+    {X, X, X, X, X, X},
+    {X, X, X, X, X, X},
+    {X, X, X, X, O, X},
+
+    // right
+    {X, X, X, X, X, X},
+    {X, X, X, X, X, X},
+    {X, X, X, X, X, X},
+    {X, X, X, X, X, X},
+};
+
 const uint8_t* led_layout_adjust[][6] = {
     // left
     {X, X, C, Y, C, X},
@@ -365,6 +379,12 @@ bool rgb_matrix_indicators_user(void) {
 
         case _FUN:
             apply_led_layout(led_layout_fun);
+            need_clear = true;
+            return false;
+            break;
+
+        case _FUN_NUM:
+            apply_led_layout(led_layout_fun_num);
             need_clear = true;
             return false;
             break;
