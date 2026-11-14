@@ -34,7 +34,9 @@ enum layer_names {
 
 enum planck_keycodes {
   LOWER = SAFE_RANGE,
-  RAISE
+  RAISE,
+  OS_GUI, // like OSM(MOD_LGUI), but registers the mod on press, so mouse + mod works
+  OS_CTL  // like OSM(MOD_LCTL), ditto
 };
 
 // S(kc) is Left shift
@@ -53,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_TAB,               KC_Q,    KC_W,    KC_E,    KC_R,  KC_T, /**/  KC_Y,   KC_U,  KC_I,    KC_O,    KC_P,         KC_BSPC,
   MT(MOD_LCTL, KC_ESC), KC_A,    KC_S,    KC_D,    KC_F,  KC_G, /**/  KC_H,   KC_J, KC_K, KC_L, KC_SCLN/*ø*/, KC_QUOT/*æ*/,
   OSM(MOD_LSFT),        KC_Z,    KC_X,    KC_C,    KC_V,  KC_B, /**/  KC_N,   KC_M,  KC_COMM, KC_DOT,  KC_SLSH,      KC_ENT,
-  OSM(MOD_HYPR),        OSM(MOD_LCTL), OSM(MOD_LALT), OSM(MOD_LGUI), LOWER, KC_SPC, /**/  LT(_ONEHAND,KC_SPC), RAISE, MT(MOD_LGUI,KC_LEFT), MT(MOD_LALT,KC_DOWN), MT(MOD_LCTL,KC_UP), HYPR_T(KC_RGHT)
+  OSM(MOD_HYPR),        OS_CTL,        OSM(MOD_LALT), OS_GUI,        LOWER, KC_SPC, /**/  LT(_ONEHAND,KC_SPC), RAISE, MT(MOD_LGUI,KC_LEFT), MT(MOD_LALT,KC_DOWN), MT(MOD_LCTL,KC_UP), HYPR_T(KC_RGHT)
 ),
 [_FUN] = LAYOUT_ortho_4x12(
   _______, _______, _______, _______, _______, _______,  /**/ _______, _______, _______, _______, _______, _______,
@@ -229,12 +231,49 @@ void matrix_scan_user(void) {
   }
 }
 
+// Instant one-shot mods: the host sees the mod immediately on press (so
+// mod + mouse click/scroll works without waiting for TAPPING_TERM). A quick
+// lone tap is turned into a one-shot mod on release, like OSM().
+typedef struct {
+  uint16_t timer;
+  bool interrupted;
+} instant_oneshot_t;
+
+static instant_oneshot_t os_gui_state = {0};
+static instant_oneshot_t os_ctl_state = {0};
+
+static bool instant_oneshot(instant_oneshot_t *state, uint8_t mods, keyrecord_t *record) {
+  if (record->event.pressed) {
+    register_mods(mods);
+    state->timer = timer_read();
+    state->interrupted = false;
+  } else {
+    unregister_mods(mods);
+    if (!state->interrupted && timer_elapsed(state->timer) < TAPPING_TERM) {
+      add_oneshot_mods(mods);
+    }
+  }
+  return false;
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  // Any other key press means the instant one-shot keys were used as held mods
+  if (record->event.pressed) {
+    if (keycode != OS_GUI) os_gui_state.interrupted = true;
+    if (keycode != OS_CTL) os_ctl_state.interrupted = true;
+  }
+
   // Clear bootloader mode on any other keypress
   if (keycode != QK_BOOT && record->event.pressed) {
     in_bootloader_mode = false;
   }
   switch (keycode) {
+    case OS_GUI:
+      return instant_oneshot(&os_gui_state, MOD_BIT(KC_LGUI), record);
+
+    case OS_CTL:
+      return instant_oneshot(&os_ctl_state, MOD_BIT(KC_LCTL), record);
+
     case QK_BOOT:
       if (record->event.pressed) {
         in_bootloader_mode = true;
